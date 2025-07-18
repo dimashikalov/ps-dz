@@ -1,4 +1,21 @@
 :root {
+  --color-bg: #f0f4f8;
+  --color-primary: #ffffff;
+  --color-text: #000000;
+  --color-card-inner-border: #cce8ff;
+  --font: 'Roboto', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  font-family: var(--font);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
