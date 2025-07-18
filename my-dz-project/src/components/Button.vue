@@ -11,7 +11,8 @@
   border-radius: 100px;
   text-align: center;
   border: none;
-  background-color: #008bfe;
+  background-color: var(--color-secondary);
+  /* background-color: #008bfe; */
   color: #ffffff;
   cursor: pointer;
   font-size: 24px;
