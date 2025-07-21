@@ -9,8 +9,8 @@ const cardNumber = '01';
 const cardState = ref({
   word: 'unadmitted!!!',
   translation: 'Перевод',
-  state: 'close' | 'opened',
-  status: 'success' | 'fail' | 'pending',
+  state: 'closed',
+  status: 'pending',
 });
 </script>
 
