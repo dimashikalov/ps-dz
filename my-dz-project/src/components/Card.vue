@@ -1,7 +1,13 @@
 <script setup>
-const { cardNumber, word } = defineProps({
-  cardNumber: String,
+// const { cardNumber } = defineProps({
+//   cardNumber: String,
+// });
+const { translation, word, state, status, cardNumber } = defineProps({
   word: String,
+  translation: String,
+  state: String,
+  status: String,
+  cardNumber: String,
 });
 const emit = defineEmits(['flip-card', 'change-status']);
 
