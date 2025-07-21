@@ -1,13 +1,13 @@
 <script setup>
 import IconLikes from '../icons/IconLikes.vue';
 const props = defineProps({
-  likes: Number,
+  score: Number,
 });
 </script>
 <template>
   <div class="score">
     <div class="likes-container">
-      <span>{{ props.likes }}</span>
+      <span>{{ props.score }}</span>
       <IconLikes />
     </div>
   </div>

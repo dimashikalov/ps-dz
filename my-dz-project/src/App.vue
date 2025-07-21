@@ -2,9 +2,16 @@
 import Button from './components/Button.vue';
 import Header from './components/Header.vue';
 import Card from './components/Card.vue';
+import { ref } from 'vue';
 
 const cardNumber = '01';
-const word = 'unadmitted';
+
+const cardState = ref({
+  word: 'unadmitted!!!',
+  translation: 'Перевод',
+  state: 'close' | 'opened',
+  status: 'success' | 'fail' | 'pending',
+});
 </script>
 
 <template>
@@ -13,7 +20,7 @@ const word = 'unadmitted';
 
     <div class="content">
       <Button>Начать игру</Button>
-      <Card :card-number="cardNumber" :word="word" />
+      <Card v-bind="cardState" :card-number="cardNumber" />
     </div>
   </main>
 </template>
