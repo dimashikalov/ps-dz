@@ -1,7 +1,7 @@
 <script setup>
-// const { cardNumber } = defineProps({
-//   cardNumber: String,
-// });
+import Button from './Button.vue';
+import IconClose from './../icons/IconClose.vue';
+import IconSuccess from './../icons/IconSuccess.vue';
 const { translation, word, state, status, cardNumber } = defineProps({
   word: String,
   translation: String,
@@ -17,19 +17,64 @@ function flipCard() {
 // function changeStatus() {
 //   emit('change-status', true);
 // }
+
+/*
+Данные карточки
+word - англ. перевод
+translation - русский перевод
+state - closed | opened - состояние карточки
+status - success | fail | pending - состояние ответа 
+*/
 </script>
+
 <template>
   <div class="card">
     <div class="card-header">
       {{ cardNumber }}
     </div>
-    <div class="card-content">
+    <template v-if="state == 'opened' && status == 'success'">
+      <div class="card-icon"><IconSuccess :width="36" :height="36" /></div>
+    </template>
+    <template v-if="state == 'opened' && status == 'fail'">
+      <div class="card-icon">
+        <IconClose :width="36" :height="36" />
+      </div>
+    </template>
+    <div class="card-content" v-if="state == 'closed'">
       {{ word }}
     </div>
-    <div class="card-footer" @click="flipCard()">ПЕРЕВЕРНУТЬ</div>
+    <div class="card-content" v-else>
+      <!-- <div class="card-content" v-if="state == 'opened'"> -->
+      {{ translation }}
+    </div>
+    <div class="card-footer" @click="flipCard()" v-if="state == 'closed'">
+      ПЕРЕВЕРНУТЬ
+    </div>
+    <div
+      class="card-footer"
+      @click="flipCard()"
+      v-else-if="state == 'opened' && status == 'pending'"
+    >
+      <Button class="card-button"><IconSuccess /></Button>
+      <Button class="card-button"><IconClose /></Button>
+    </div>
+    <div class="card-footer" @click="flipCard()" v-else>Завершено</div>
   </div>
 </template>
 <style scoped>
+.card-icon {
+  margin-top: -28px;
+  z-index: 1;
+}
+.card-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  background-color: var(--color-primary);
+  border: none;
+}
 .card {
   position: relative;
   width: 220px;
@@ -39,6 +84,7 @@ function flipCard() {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   padding: 16px;
   background: var(--color-primary);
   text-align: center;
@@ -63,6 +109,7 @@ function flipCard() {
   padding: 0 3px;
   background: var(--color-primary);
   width: min-content;
+  display: flex;
 }
 .card-header {
   align-self: flex-start;
@@ -71,6 +118,7 @@ function flipCard() {
 
 .card-footer {
   align-self: center;
+  gap: 15px;
 }
 .card-content {
   font-size: 20px;
