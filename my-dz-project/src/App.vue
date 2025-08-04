@@ -2,53 +2,46 @@
 import Button from './components/Button.vue';
 import Header from './components/Header.vue';
 import Card from './components/Card.vue';
-import { ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 /*
 Данные карточки
 word - англ. перевод
 translation - русский перевод
 state - closed | opened - состояние карточки
-status - success | fail | pending - состояние ответа 
+status - success | fail | pending - состояние ответа
 */
-const cardNumber = '01';
-const cardArray = ref([
-  {
-    id: '01',
-    word: 'unadmitted!!!',
-    translation: 'Перевод',
+const cardArray = ref([]);
+let data = ref();
+
+async function getCards() {
+  const res = await fetch('http://localhost:8080/api/random-words');
+  data.value = await res.json();
+  console.log('res == ', data.value);
+}
+
+const computedArray = computed(() => {
+  if (!data.value) return;
+  cardArray.value = data.value.map((item, index) => ({
+    id: index,
+    cardNumber: String(index + 1).padStart(2, '0'),
+    word: item.word,
+    translation: item.translation,
     state: 'closed',
     status: 'pending',
-  },
-  {
-    id: '02',
-    word: 'unadmitted!!!',
-    translation: 'Перевод',
-    state: 'opened',
-    status: 'pending',
-  },
-  {
-    id: '03',
-    word: 'unadmitted!!!',
-    translation: 'Перевод',
-    state: 'opened',
-    status: 'success',
-  },
-  {
-    id: '04',
-    word: 'unadmitted!!!',
-    translation: 'Перевод',
-    state: 'opened',
-    status: 'fail',
-  },
-]);
-
-const cardState = ref({
-  word: 'unadmitted!!!',
-  translation: 'Перевод',
-  state: 'closed',
-  status: 'pending',
+  }));
 });
+
+onMounted(() => {
+  getCards();
+});
+
+const flipCard = (state, id) => {
+  const card = cardArray.value.find((item) => item.id === id);
+  if (card) {
+    card.state = state ? 'opened' : 'closed';
+  }
+};
 </script>
 
 <template>
@@ -62,8 +55,9 @@ const cardState = ref({
       <Card
         v-for="item in cardArray"
         v-bind="item"
-        :card-number="item.id"
+        :card-number="item.cardNumber"
         :key="item.id"
+        @flip-card="flipCard"
       />
     </div>
   </main>
@@ -78,6 +72,7 @@ const cardState = ref({
 }
 .cards-content {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
   align-items: center;

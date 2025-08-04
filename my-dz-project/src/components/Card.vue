@@ -2,7 +2,8 @@
 import Button from './Button.vue';
 import IconClose from './../icons/IconClose.vue';
 import IconSuccess from './../icons/IconSuccess.vue';
-const { translation, word, state, status, cardNumber } = defineProps({
+const { translation, word, state, status, cardNumber, id } = defineProps({
+  id: Number,
   word: String,
   translation: String,
   state: String,
@@ -12,19 +13,11 @@ const { translation, word, state, status, cardNumber } = defineProps({
 const emit = defineEmits(['flip-card', 'change-status']);
 
 function flipCard() {
-  emit('flip-card', true);
+  emit('flip-card', true, id);
 }
 // function changeStatus() {
 //   emit('change-status', true);
 // }
-
-/*
-Данные карточки
-word - англ. перевод
-translation - русский перевод
-state - closed | opened - состояние карточки
-status - success | fail | pending - состояние ответа 
-*/
 </script>
 
 <template>
@@ -44,7 +37,6 @@ status - success | fail | pending - состояние ответа
       {{ word }}
     </div>
     <div class="card-content" v-else>
-      <!-- <div class="card-content" v-if="state == 'opened'"> -->
       {{ translation }}
     </div>
     <div class="card-footer" @click="flipCard()" v-if="state == 'closed'">
