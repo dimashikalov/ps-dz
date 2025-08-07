@@ -1,13 +1,10 @@
 <script setup>
-import { ref } from 'vue';
 import Score from './Score.vue';
-
-const score = ref(10);
 </script>
 <template>
   <header class="header">
     <h3>Запомни слово</h3>
-    <Score :score="score" />
+    <Score />
   </header>
 </template>
 

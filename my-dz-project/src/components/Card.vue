@@ -2,6 +2,7 @@
 import Button from './Button.vue';
 import IconClose from './../icons/IconClose.vue';
 import IconSuccess from './../icons/IconSuccess.vue';
+import { inject } from 'vue';
 const { translation, word, state, status, cardNumber, id } = defineProps({
   id: Number,
   word: String,
@@ -11,13 +12,24 @@ const { translation, word, state, status, cardNumber, id } = defineProps({
   cardNumber: String,
 });
 const emit = defineEmits(['flip-card', 'change-status']);
+const score = inject('score');
 
 function flipCard() {
   emit('flip-card', true, id);
 }
-// function changeStatus() {
-//   emit('change-status', true);
-// }
+
+function changeStatus(status) {
+  if (status === 'success') scoreIncrement();
+  if (status === 'fail') scoreDicrement();
+  emit('change-status', status, id);
+}
+
+const scoreIncrement = () => {
+  score.value += 10;
+};
+const scoreDicrement = () => {
+  score.value -= 4;
+};
 </script>
 
 <template>
@@ -47,8 +59,12 @@ function flipCard() {
       @click="flipCard()"
       v-else-if="state == 'opened' && status == 'pending'"
     >
-      <Button class="card-button"><IconSuccess /></Button>
-      <Button class="card-button"><IconClose /></Button>
+      <Button class="card-button" @click="changeStatus('success')"
+        ><IconSuccess
+      /></Button>
+      <Button class="card-button" @click="changeStatus('fail')"
+        ><IconClose
+      /></Button>
     </div>
     <div class="card-footer" @click="flipCard()" v-else>Завершено</div>
   </div>

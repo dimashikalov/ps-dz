@@ -2,7 +2,7 @@
 import Button from './components/Button.vue';
 import Header from './components/Header.vue';
 import Card from './components/Card.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 
 /*
 Данные карточки
@@ -13,14 +13,15 @@ status - success | fail | pending - состояние ответа
 */
 const cardArray = ref([]);
 let data = ref();
+let startPlay = ref();
+const score = ref(100);
+
+provide('score', score);
 
 async function getCards() {
   const res = await fetch('http://localhost:8080/api/random-words');
   data.value = await res.json();
   console.log('res == ', data.value);
-}
-
-const computedArray = computed(() => {
   if (!data.value) return;
   cardArray.value = data.value.map((item, index) => ({
     id: index,
@@ -30,11 +31,8 @@ const computedArray = computed(() => {
     state: 'closed',
     status: 'pending',
   }));
-});
-
-onMounted(() => {
-  getCards();
-});
+  startPlay.value = true;
+}
 
 const flipCard = (state, id) => {
   const card = cardArray.value.find((item) => item.id === id);
@@ -42,15 +40,22 @@ const flipCard = (state, id) => {
     card.state = state ? 'opened' : 'closed';
   }
 };
+const changeCardStatus = (status, id) => {
+  console.log('status id ', status, id);
+  const card = cardArray.value.find((item) => item.id === id);
+  if (card) {
+    card.status = status;
+  }
+};
+
+const handleIsPlay = computed(() => {
+  return startPlay.value ? 'Начать заново' : 'Начать игру';
+});
 </script>
 
 <template>
   <main>
     <Header />
-
-    <div class="content">
-      <Button class="button">Начать игру</Button>
-    </div>
     <div class="cards-content">
       <Card
         v-for="item in cardArray"
@@ -58,7 +63,11 @@ const flipCard = (state, id) => {
         :card-number="item.cardNumber"
         :key="item.id"
         @flip-card="flipCard"
+        @change-status="changeCardStatus"
       />
+    </div>
+    <div class="content">
+      <Button class="button" @click="getCards">{{ handleIsPlay }}</Button>
     </div>
   </main>
 </template>
