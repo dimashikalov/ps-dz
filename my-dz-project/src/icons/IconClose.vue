@@ -1,3 +1,9 @@
+<script setup>
+const { width = 24, height = 24 } = defineProps({
+  width: Number,
+  height: Number,
+});
+</script>
 <template>
   <svg
     :width="width"
@@ -14,10 +20,5 @@
     />
   </svg>
 </template>
-<script setup>
-const { width = '24', height = '24' } = defineProps({
-  width: Number,
-  height: Number,
-});
-</script>
+
 <style scoped></style>

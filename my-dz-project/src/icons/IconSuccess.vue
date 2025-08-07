@@ -1,5 +1,5 @@
 <script setup>
-const { width = '24', height = '24' } = defineProps({
+const { width = 24, height = 24 } = defineProps({
   width: Number,
   height: Number,
 });
